@@ -45,11 +45,18 @@ module.exports = function (app) {
     
   app.route('/api/solve')
     .post((req, res) => {
-
-    const puzzle = req.body.puzzle;
-
-    solver.validate(puzzle);
-    console.log(puzzle);
-
-    });
+      const puzzle = req.body.puzzle;
+      
+      if (!solver.validate(puzzle)) {
+        return res.json({ error: 'Invalid puzzle string' });
+      }
+  
+      const solved = solver.solve(puzzle);
+      if (!solved) {
+        return res.json({ error: 'Puzzle cannot be solved' });
+      }
+      
+      return res.json({ solution: solved });
+  });
+  
 };

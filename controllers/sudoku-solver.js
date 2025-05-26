@@ -2,20 +2,10 @@ class SudokuSolver {
 
 
   validate(puzzleString) {
-
-    try {
-
-      if(puzzleString.length === 81){
-        console.log("this is a legit puzzle string homie");
-      } else {
-        console.log("error: puzzle string < 81 chars");
-      }
-
-
-    } catch(err){
-
+    if(puzzleString.length !== 81){
+      return false;
     }
-
+    return true;
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
@@ -59,7 +49,30 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    
+    let index = puzzleString.indexOf('.');
+    if (index === -1) {
+      return puzzleString;
+    }
+  
+    let row = Math.floor(index / 9);
+    let col = index % 9;
+  
+    for (let num = 1; num <= 9; num++) {
+      let value = num.toString();
+  
+      if (
+        this.checkRowPlacement(puzzleString, row, col, value) &&
+        this.checkColPlacement(puzzleString, row, col, value) &&
+        this.checkRegionPlacement(puzzleString, row, col, value)
+      ) {
+        let newPuzzleString =
+          puzzleString.slice(0, index) + value + puzzleString.slice(index + 1);
+  
+        let result = this.solve(newPuzzleString);
+        if (result) return result;
+      }
+    }
+    return false;
   }
 }
 
