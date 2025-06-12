@@ -1,7 +1,6 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../server");
-const { inv } = require("16");
 const { assert } = chai;
 
 chai.use(chaiHttp);
